@@ -102,6 +102,7 @@ printStatement "${ROW_STRING}"
 printStatement "\n\n\n 🚀 Step 1: Archiving for ${DEVICE_SIM_ARCH}"
 printStatement "${ROW_STRING}"
 
+
 EXIT_MESSAGE="$(xcodebuild archive -workspace ${FRAMEWORK_NAME}.xcworkspace -scheme "${FRAMEWORK_NAME}" -destination="generic/platform=iOS Simulator" -archivePath "${SIMULATOR_DIR_PATH}"/"${DEVICE_SIM_ARCH}".xcarchive -derivedDataPath "${DERIVED_DATA_DIR_PATH}" -sdk "${DEVICE_SIM_ARCH}" SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES)"
 
 
@@ -112,6 +113,7 @@ checkSuccess
 printStatement "${ROW_STRING}"
 printStatement "\n\n\n 🚀 Step 2: Archiving for ${DEVICE_ARCH} \n\n\n"
 
+
 EXIT_MESSAGE="$(xcodebuild archive -workspace ${FRAMEWORK_NAME}.xcworkspace -scheme "${FRAMEWORK_NAME}" -destination="generic/platform=iOS" -archivePath "${DEVICES_DIR_PATH}"/"${DEVICE_ARCH}".xcarchive -derivedDataPath "${DERIVED_DATA_DIR_PATH}" -sdk "${DEVICE_ARCH}" SKIP_INSTALL=NO BUILD_LIBRARY_FOR_DISTRIBUTION=YES)"
 
 
@@ -120,15 +122,28 @@ checkSuccess
 ######################
 
 printStatement "${ROW_STRING}"
-printStatement "\n\n\n 🛠 Step 3: Creating XC Framework into universal folder"
+printStatement "\n\n\n 🛠 Step 3: XCFramework: Generating IPHONE BCSymbolMap paths..."
 printStatement "${ROW_STRING}"
 
-xcodebuild -create-xcframework -framework "${DEVICES_DIR_PATH}"/"${DEVICE_ARCH}".xcarchive/Products/Library/Frameworks/"${FRAMEWORK_NAME}".framework -framework "${SIMULATOR_DIR_PATH}"/"${DEVICE_SIM_ARCH}".xcarchive/Products/Library/Frameworks/"${FRAMEWORK_NAME}".framework -output "${UNIVERSAL_LIBRARY_DIR_PATH}"/"${FRAMEWORK_NAME}".xcframework
+IPHONE_BCSYMBOLMAP_COMMANDS="$(find ${DEVICES_DIR_PATH}/${DEVICE_ARCH}.xcarchive/BCSymbolMaps -type f -print0 | xargs -0 -I {} echo "-debug-symbols {}" | tr "\n" " ")"
 
 ######################
 
 printStatement "${ROW_STRING}"
-printStatement "\n\n\n 🛠 Step 4: Zip XC Framework into universal folder"
+printStatement "\n\n\n 🛠 Step 4: Creating XC Framework into universal folder"
+printStatement "${ROW_STRING}"
+
+xcodebuild -create-xcframework \
+ -framework "${DEVICES_DIR_PATH}"/"${DEVICE_ARCH}".xcarchive/Products/Library/Frameworks/"${FRAMEWORK_NAME}".framework \
+ -debug-symbols "${DEVICES_DIR_PATH}"/"${DEVICE_ARCH}".xcarchive/dSYMs/"${FRAMEWORK_NAME}".framework.dSYM $IPHONE_BCSYMBOLMAP_COMMANDS \
+ -framework "${SIMULATOR_DIR_PATH}"/"${DEVICE_SIM_ARCH}".xcarchive/Products/Library/Frameworks/"${FRAMEWORK_NAME}".framework \
+ -debug-symbols "${SIMULATOR_DIR_PATH}"/"${DEVICE_SIM_ARCH}".xcarchive/dSYMs/"${FRAMEWORK_NAME}".framework.dSYM \
+ -output "${UNIVERSAL_LIBRARY_DIR_PATH}"/"${FRAMEWORK_NAME}".xcframework
+
+######################
+
+printStatement "${ROW_STRING}"
+printStatement "\n\n\n 🛠 Step 5: Zip XC Framework into universal folder"
 printStatement "${ROW_STRING}"
 
 cd "${UNIVERSAL_LIBRARY_DIR_PATH}"
