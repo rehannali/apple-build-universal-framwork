@@ -1,5 +1,6 @@
 #!/bin/bash
 
+set -e
 # Make sure to run this script in Framework folder to work properly.
 # Create universal-framework.sh and copy all content to it.
 # Provide FRAMEWORK_NAME to start build
