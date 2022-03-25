@@ -18,3 +18,7 @@ FRAMEWORK_NAME="${YOUR_FRAMWORK_NAME}"
 **Build Apple platform universal framework**
 
 > You need to remove `-workspace ${FRAMEWORK_NAME}.xcworkspace` for you to work from `xcodebuild` if your framework is not depend on any pod.
+
+**Public repo binary distribution**
+
+> You need to add you public repo path to work fully automation.
