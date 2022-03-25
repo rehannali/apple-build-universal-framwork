@@ -19,6 +19,6 @@ FRAMEWORK_NAME="${YOUR_FRAMWORK_NAME}"
 
 > You need to remove `-workspace ${FRAMEWORK_NAME}.xcworkspace` for you to work from `xcodebuild` if your framework is not depend on any pod.
 
-**Public repo binary distribution**
+**Public repo binary distribution Github using SPM**
 
 > You need to add you public repo path to work fully automation.
