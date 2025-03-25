@@ -22,3 +22,7 @@ FRAMEWORK_NAME="${YOUR_FRAMWORK_NAME}"
 **Public repo binary distribution Github using SPM**
 
 > You need to add you public repo path to work fully automation.
+
+**Private repo binary distribution Bitbucket using spm**
+
+> You need to configure credentials to work with private repo for upload and download artifacts.
