@@ -14,6 +14,12 @@ DEVICE_SIM_ARCH="${PLATFORM_ARCHITECTURE}" # add Available Platforms/Architectur
 
 FRAMEWORK_NAME="${YOUR_FRAMWORK_NAME}"
 ```
+> If you are using bitbucket version of script then modify these variables as well.
+
+```bash
+BITBUCKET_WORKSPACE_NAME="${YOUR_WORKSPACE_NAME}"
+BITBUCKET_REPO_NAME="${YOUR_REPO_SLUG}"
+```
 
 **Build Apple platform universal framework**
 
